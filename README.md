@@ -10,18 +10,18 @@ The application uses kotlin, maven and java version 17.
 
 If you use SDKMAN to setup you Java environment:
 ```
-> sdk install java 17.0.3.6.1-amzn 
+sdk install java 17.0.3.6.1-amzn 
 ```
 
 Run application using maven:
 ```
-> mvn spring-boot:run
+mvn spring-boot:run
 ```
 
 ## Invoke REST API
 
 ```
-> curl localhost:8080/fizzbuzz/1
+curl localhost:8080/fizzbuzz/1
 ```
 
 The REST call should return "1".
