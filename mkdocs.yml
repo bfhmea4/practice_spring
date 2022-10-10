@@ -1,0 +1,13 @@
+# Project information
+site_name: Practice Spring
+site_author: Tony Mowers
+site_description: >-
+  Documentation and guides BFH Project 1 Spring Practice
+
+# Repository
+repo_url: https://github.com/bfhmea4/practice_spring
+repo_name: bfhmea4/practice_spring
+edit_uri: ""
+
+# Copyright
+copyright: Copyright &copy; 2022 Tony Mowers
