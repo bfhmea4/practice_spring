@@ -1,27 +1,42 @@
 # Practice Spring
 
-This is a kotlin application used by Tony Mowers to demonstrate some application development concepts.
+This is a kotlin application is used by Tony Mowers to demonstrate some application development concepts 
+for BFH Project 1 students.
 
 ## Requirements
 
 The application uses kotlin, maven and java version 17.
 
-## Start Application Using Maven 
-
-If you use SDKMAN to setup you Java environment:
+If you use [SDKMAN](https://sdkman.io/) to setup you Java environment:
 ```
 sdk install java 17.0.3.6.1-amzn 
 ```
 
-Run application using maven:
+If you don't use SDKMAN then you must use some other means to make sure your environment has
+the proper JDK installed and accessible via the command line.
+
+## Run Test Suites
+
+To run the application's test suite:
+```
+mvn clean test
+```
+
+## Run Application Using Maven
+
+### Start application
+
+Start application by using maven:
 ```
 mvn spring-boot:run
 ```
 
-## Invoke REST API
+### Invoke REST API
 
+Once the application is running you can test the REST API via:
 ```
-curl localhost:8080/fizzbuzz/1
+curl localhost:8080/api/fizzbuzz/15
 ```
 
-The REST call should return "1".
+The REST call should return "FizzBuzz".
+

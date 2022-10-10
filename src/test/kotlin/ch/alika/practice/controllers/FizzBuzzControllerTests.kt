@@ -12,9 +12,13 @@ class FizzBuzzControllerTests {
     lateinit var fizzBuzzController: FizzBuzzController
 
     @Test
-    fun integer_returns_string_value_of_integer() {
+    fun integer_not_divisible_by_three_or_five_returns_string_value_of_integer() {
         assertThat(fizzBuzzController.getFizzBuzzResult(1)).isEqualTo("1")
     }
 
+    @Test
+    fun integer_divisible_by_three_returns_fizz() {
+        assertThat(fizzBuzzController.getFizzBuzzResult(3)).isEqualTo("Fizz")
+    }
 }
 
