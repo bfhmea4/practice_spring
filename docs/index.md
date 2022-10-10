@@ -7,7 +7,7 @@ programming language, and the spring-boot framework, most of the concepts will s
 
 ## Application Documentation
 
-The first common concept is demonstrated by this very website.   Most applications are likely need user documention and this website will be used to host such documentation.  
+The first common concept is demonstrated by this very website.   Most applications likely need user documention and this website will be used to host such documentation.  
 
 The documentation for this website was built using [MkDocs](https://www.mkdocs.org/), hosted as Github Pages, and deployed by putting in place the necessary Github action workflow.
 
