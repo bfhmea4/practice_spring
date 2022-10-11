@@ -40,3 +40,18 @@ curl localhost:8080/api/fizzbuzz/15
 
 The REST call should return "FizzBuzz".
 
+## Docker Images
+
+See [Spring Boot Docker](https://spring.io/guides/gs/spring-boot-docker/) webpage for more details.
+
+### Build Local Image 
+
+```
+mvn spring-boot:build-image -DskipTests=True -Dspring-boot.build-image.imageName=tonymowers/practice
+```
+
+### Run Local Image
+
+```
+docker run -p 8080:8080 -t tonymowers/practice
+```
