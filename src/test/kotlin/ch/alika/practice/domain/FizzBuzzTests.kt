@@ -1,6 +1,5 @@
-package ch.alika.practice
+package ch.alika.practice.domain
 
-import ch.alika.practice.domain.fizzbuzz
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -38,7 +38,7 @@ Once the application is running you can test the REST API via:
 curl localhost:8080/api/fizzbuzz/15
 ```
 
-The REST call should return "FizzBuzz".
+The REST call result should be {"n": 15, "result":"FizzBuzz"}.
 
 ## Docker Images
 
@@ -54,4 +54,10 @@ mvn spring-boot:build-image -DskipTests=True -Dspring-boot.build-image.imageName
 
 ```
 docker run -p 8080:8080 -t tonymowers/practice
+```
+
+Run test suite against localhost
+
+```
+mvn test -Dpractice.test.localhost=true
 ```
