@@ -1,9 +1,10 @@
 package ch.alika.practice.employees
 
 import ch.alika.practice.dtos.EmployeeDTO
-import ch.alika.practice.dtos.EmployeeListDTO
 import ch.alika.practice.exceptions.EntityNotFoundException
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,81 +19,94 @@ class EmployeeCrudFeatureTests {
     @Autowired
     private lateinit var actor: EmployeeCrudActor
 
-    @Test
-    fun new_employee_can_be_found() {
-        // when
-        val employeeId = actor.createsEmployee(createEmployeeDTO())
-        // then
-        assertThat(actor.seesEmployeeExists(employeeId)).isTrue
-    }
+    @Nested
+    @DisplayName("Given we have created one employee THEN we ...")
+    inner class GivenOneNewEmployee {
+        private val employeeId = actor.createsEmployee(createEmployeeDTO(name="Tony"))
 
-    @Test
-    fun non_existing_employee_cannot_be_found() {
-        assertThat(actor.seesEmployeeExists(-1)).isFalse
-    }
+        @Test
+        @DisplayName("can find it")
+        fun can_find_it() {
+            assertThat(actor.seesEmployeeExists(employeeId)).isTrue
+        }
 
-    @Test
-    fun get_employee_returns_employee() {
-        // given
-        val employeeId = actor.createsEmployee(createEmployeeDTO())
-        // when
-        val employee = actor.getsEmployee(employeeId)
-        // then
-        assertThat(employee.id).isEqualTo(employeeId)
-    }
+        @DisplayName("can retrieve it")
+        @Test
+        fun can_retrieve_it() {
+            assertThat(actor.getsEmployee(employeeId).id).isEqualTo(employeeId)
+        }
 
-    @Test
-    fun get_non_existing_employee_throws_not_found() {
-        assertThrows<EntityNotFoundException> {
-            actor.getsEmployee(-1)
+        @Test
+        @DisplayName("can find it amongst all employees")
+        fun can_find_in_list_of_all_employees() {
+            actor.createsEmployee(createEmployeeDTO())
+            val allEmployees = actor.getsAllEmployees().employees
+
+            // then
+            assertThat(allEmployees.size).isGreaterThan(1)
+            assertThat(allEmployees.filter { i -> i.id == employeeId }).isNotEmpty
+        }
+
+        @Test
+        @DisplayName("can delete it")
+        fun can_delete_it() {
+            actor.deletesEmployee(employeeId)
+            assertThat(actor.seesEmployeeExists(employeeId)).isFalse
+        }
+
+        @Test
+        @DisplayName("can update it")
+        fun can_update_it() {
+            // given
+            val employee = actor.getsEmployee(employeeId)
+            // when
+            actor.updatesEmployee(employeeId, employee.copy(name = "Something new"))
+            // then
+            val updatedEmployed = actor.getsEmployee(employeeId)
+            assertThat(updatedEmployed.name).isEqualTo("Something new")
         }
     }
 
-    @Test
-    fun update_employee_changes_employee_properties() {
-        // given
-        val employeeId = actor.createsEmployee(createEmployeeDTO())
-        val employee = actor.getsEmployee(employeeId)
-        // when
-        actor.updatesEmployee(employeeId, employee.copy(name = "Something new"))
-        // then
-        val updatedEmployed = actor.getsEmployee(employeeId)
-        assertThat(updatedEmployed.name).isEqualTo("Something new")
-    }
+    @Nested
+    @DisplayName("Given a non-existing employee THEN we ...")
+    inner class GivenNonExistingEmployee {
+        private val nonExistingEmployeeId = -1L
 
-    @Test
-    fun update_non_existing_employee_throws_not_found() {
-        assertThrows<EntityNotFoundException> {
-            actor.updatesEmployee(-1, createEmployeeDTO())
+        @Test
+        @DisplayName("cannot find it")
+        fun cannot_find_it() {
+            assertThat(actor.seesEmployeeExists(nonExistingEmployeeId)).isFalse
         }
-    }
 
-    @Test
-    fun deleted_employee_is_gone() {
-        // given
-        val employeeId = actor.createsEmployee(createEmployeeDTO())
-        // when
-        actor.deletesEmployee(employeeId)
-        // then
-        assertThat(actor.seesEmployeeExists(employeeId)).isFalse
-    }
+        @Test
+        @DisplayName("cannot retrieve it")
+        fun cannot_retrieve_it() {
+            assertThrows<EntityNotFoundException> {
+                actor.getsEmployee(nonExistingEmployeeId)
+            }
+        }
 
-    @Test
-    fun delete_non_existing_employee_throws_not_found() {
-         assertThrows<EntityNotFoundException> {
-             actor.deletesEmployee(-1)
-         }
-    }
+        @Test
+        @DisplayName("cannot update it")
+        fun cannot_update_it() {
+            assertThrows<EntityNotFoundException> {
+                actor.updatesEmployee(nonExistingEmployeeId, createEmployeeDTO())
+            }
+        }
 
-    @Test
-    fun get_all_employees_returns_non_empty_list() {
-        // given
-        actor.createsEmployee(createEmployeeDTO(name="A"))
-        actor.createsEmployee(createEmployeeDTO(name="B"))
-        // when
-        val employeeList: EmployeeListDTO = actor.getsAllEmployees()
-        // then
-        assertThat(employeeList.employees).isNotEmpty
+        @Test
+        @DisplayName("cannot delete it")
+        fun cannot_delete_it() {
+            assertThrows<EntityNotFoundException> {
+                actor.deletesEmployee(nonExistingEmployeeId)
+            }
+        }
+
+        @Test
+        @DisplayName("cannot find it amongst all employees")
+        fun cannot_find_it_in_list_of_all_employees() {
+            assertThat(actor.getsAllEmployees().employees.filter { i -> i.id == nonExistingEmployeeId }).isEmpty()
+        }
     }
     
     private fun createEmployeeDTO(name: String = "") = EmployeeDTO(name = name)
