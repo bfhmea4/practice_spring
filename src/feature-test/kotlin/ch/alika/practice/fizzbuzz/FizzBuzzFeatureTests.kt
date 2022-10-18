@@ -1,29 +1,11 @@
-package ch.alika.practice.features
+package ch.alika.practice.fizzbuzz
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
-
-class TestConfiguration {
-
-    @Value("\${practice.test.localhost:false}")
-    private var localhost: Boolean = false
-
-    @Bean
-    fun fizzBuzzActor(): FizzBuzzActor {
-        return if (localhost) {
-            WebClientBasedFizzBuzzActor.localHostServer()
-        } else {
-            WebClientBasedFizzBuzzActor.mockServer()
-        }
-    }
-}
-
-@SpringJUnitConfig(TestConfiguration::class)
+@SpringJUnitConfig(FizzBuzzTestConfiguration::class)
 class FizzBuzzFeatureTests {
 
     @Autowired
