@@ -31,7 +31,7 @@ class EmployeeService(private val employeeDAO: EmployeeDAO) {
 
     @Transactional
     fun updateEmployeeById(id: Long, employeeDTO: EmployeeDTO) {
-        val currentEmployee = employeeDAO.findById(id).orElseThrow() {
+        val currentEmployee = employeeDAO.findById(id).orElseThrow {
             EntityNotFoundException("Employee id = $id not found")
         }
         factory.applyEmployeeDtoToEmployeeEntity(employeeDTO, currentEmployee)
