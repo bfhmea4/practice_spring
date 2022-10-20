@@ -36,6 +36,6 @@ class EmployeeController @Autowired constructor(private val service: EmployeeSer
     @DeleteMapping("/api/employees/{id}")
     fun deleteEmployee(@PathVariable id: Long): ResponseEntity<Any> {
         service.deleteEmployeeById(id)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }

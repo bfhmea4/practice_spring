@@ -75,7 +75,7 @@ class WebClientBasedEmployeeCrudActor(private val webClient: WebTestClient) : Em
         if (result.status == HttpStatus.NOT_FOUND)
             throw EntityNotFoundException("Employee id = $employeeId")
 
-        assertThat(result.status.is2xxSuccessful).isTrue
+        assertThat(result.status).isEqualTo(HttpStatus.NO_CONTENT)
     }
 
     override fun getsAllEmployees(): EmployeeListDTO {
