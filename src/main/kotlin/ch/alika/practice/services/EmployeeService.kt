@@ -1,10 +1,8 @@
 package ch.alika.practice.services
 
-import ch.alika.practice.dtos.EmployeeDTO
-import ch.alika.practice.dtos.EmployeeEntityFactory
-import ch.alika.practice.dtos.EmployeeListDTO
-import ch.alika.practice.dtos.ObjectIdDTO
-import ch.alika.practice.entities.EmployeeDAO
+import ch.alika.practice.dtos.*
+import ch.alika.practice.repositories.EmployeeDAO
+import ch.alika.practice.entities.EmployeeEntity
 import ch.alika.practice.exceptions.EntityNotFoundException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
@@ -12,11 +10,10 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class EmployeeService(private val employeeDAO: EmployeeDAO) {
-    private val factory = EmployeeEntityFactory()
 
     @Transactional
     fun newEmployee(employeeDTO: EmployeeDTO): ObjectIdDTO {
-        val newEmployee = factory.createEmployeeEntity(employeeDTO)
+        val newEmployee = createEmployeeEntityFromDTO(employeeDTO)
         employeeDAO.save(newEmployee)
         return ObjectIdDTO(newEmployee.id!!)
     }
@@ -26,7 +23,7 @@ class EmployeeService(private val employeeDAO: EmployeeDAO) {
         val employee = employeeDAO.findById(id).orElseThrow {
             EntityNotFoundException("Employee id = $id not found")
         }
-        return factory.createEmployeeDTO(employee)
+        return createEmployeeDtoFromEntity(employee)
     }
 
     @Transactional
@@ -34,7 +31,7 @@ class EmployeeService(private val employeeDAO: EmployeeDAO) {
         val currentEmployee = employeeDAO.findById(id).orElseThrow {
             EntityNotFoundException("Employee id = $id not found")
         }
-        factory.applyEmployeeDtoToEmployeeEntity(employeeDTO, currentEmployee)
+        EmployeeEntityBuilder.applyEmployeeDtoToEntity(employeeDTO, currentEmployee)
     }
 
     @Transactional
@@ -49,8 +46,14 @@ class EmployeeService(private val employeeDAO: EmployeeDAO) {
     @Transactional
     fun getAllEmployees(): EmployeeListDTO {
         val employees =  ArrayList<EmployeeDTO>()
-        employeeDAO.findAll().forEach { i -> employees.add(factory.createEmployeeDTO(i))}
+        employeeDAO.findAll().forEach { i -> employees.add(createEmployeeDtoFromEntity(i))}
         return EmployeeListDTO(employees = employees)
     }
 
+
+    private fun createEmployeeDtoFromEntity(employee: EmployeeEntity) =
+        EmployeeDtoBuilder.createEmployeeDtoFromEntity(employee)
+
+    private fun createEmployeeEntityFromDTO(employeeDTO: EmployeeDTO): EmployeeEntity =
+        EmployeeEntityBuilder.createEmployeeEntityFromDTO(employeeDTO)
 }
