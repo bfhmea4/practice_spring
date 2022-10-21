@@ -31,7 +31,11 @@ Start application by using maven:
 mvn spring-boot:run
 ```
 
-### Invoke REST API
+## Invoking REST APIs
+
+Two different types of REST APIs are currently being exported in order to experiment with using both.
+
+### Hand-Written REST APIs
 
 Once the application is running you can test the REST API via:
 ```
@@ -39,6 +43,33 @@ curl localhost:8080/api/fizzbuzz/15
 ```
 
 The REST call result should be {"n": 15, "result":"FizzBuzz"}.
+
+You can also do standard CRUD operation on the following REST endpoint:
+
+```
+curl localhost:8080/api/employees
+```
+
+
+
+### Automatically Generated Spring DATA REST APIs
+
+Once the application is running you can also access the raw data model via SPRING DATA REST API (of via a web browser):
+```
+curl localhost:8080/data
+```
+
+The SPRING DAT REST API returns objects with links that you can use to make other REST CALLS.
+
+### H2 InMemory Database
+
+The application is currently configured for testing purposed to use an in-memory database.
+The database console can be accessed via:
+
+- [localhost:8080/h2-console]()
+- JDBC URL = jdbc:h2:mem:testdb
+- USERNAME = sa
+
 
 ## Docker Images
 

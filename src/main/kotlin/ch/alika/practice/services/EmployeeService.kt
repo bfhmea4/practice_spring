@@ -2,7 +2,7 @@ package ch.alika.practice.services
 
 import ch.alika.practice.dtos.*
 import ch.alika.practice.repositories.EmployeeDAO
-import ch.alika.practice.entities.EmployeeEntity
+import ch.alika.practice.entities.Employee
 import ch.alika.practice.exceptions.EntityNotFoundException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
@@ -51,9 +51,9 @@ class EmployeeService(private val employeeDAO: EmployeeDAO) {
     }
 
 
-    private fun createEmployeeDtoFromEntity(employee: EmployeeEntity) =
+    private fun createEmployeeDtoFromEntity(employee: Employee) =
         EmployeeDtoBuilder.createEmployeeDtoFromEntity(employee)
 
-    private fun createEmployeeEntityFromDTO(employeeDTO: EmployeeDTO): EmployeeEntity =
+    private fun createEmployeeEntityFromDTO(employeeDTO: EmployeeDTO): Employee =
         EmployeeEntityBuilder.createEmployeeEntityFromDTO(employeeDTO)
 }
