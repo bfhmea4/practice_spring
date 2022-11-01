@@ -1,8 +1,8 @@
 package ch.alika.practice.employees.impl
 
-import ch.alika.practice.dtos.EmployeeDTO
-import ch.alika.practice.dtos.EmployeeListDTO
-import ch.alika.practice.dtos.ObjectIdDTO
+import ch.alika.practice.dtos.EmployeeDto
+import ch.alika.practice.dtos.EmployeeListDto
+import ch.alika.practice.dtos.ObjectIdDto
 import ch.alika.practice.exceptions.EntityNotFoundException
 import ch.alika.practice.employees.EmployeeCrudActor
 import org.assertj.core.api.Assertions.assertThat
@@ -15,13 +15,13 @@ import reactor.core.publisher.Mono
 
 class WebClientBasedEmployeeCrudActor(private val webClient: WebTestClient) : EmployeeCrudActor {
 
-    override fun createsEmployee(employee: EmployeeDTO): Long {
+    override fun createsEmployee(employee: EmployeeDto): Long {
         val result = webClient.post()
             .uri("/api/employees")
-            .body(Mono.just(employee), EmployeeDTO::class.java)
+            .body(Mono.just(employee), EmployeeDto::class.java)
             .exchange()
             .expectStatus().isCreated
-            .expectBody<ObjectIdDTO>()
+            .expectBody<ObjectIdDto>()
             .returnResult().responseBody
 
         return result!!.id
@@ -36,12 +36,12 @@ class WebClientBasedEmployeeCrudActor(private val webClient: WebTestClient) : Em
             .is2xxSuccessful
     }
 
-    override fun getsEmployee(employeeId: Long): EmployeeDTO {
+    override fun getsEmployee(employeeId: Long): EmployeeDto {
         val result = webClient.get()
             .uri("/api/employees/$employeeId")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectBody<EmployeeDTO>()
+            .expectBody<EmployeeDto>()
             .returnResult()
 
         if (result.status == HttpStatus.NOT_FOUND)
@@ -52,10 +52,10 @@ class WebClientBasedEmployeeCrudActor(private val webClient: WebTestClient) : Em
 
     }
 
-    override fun updatesEmployee(employeeId: Long, employee: EmployeeDTO) {
+    override fun updatesEmployee(employeeId: Long, employee: EmployeeDto) {
         val result = webClient.put()
             .uri("/api/employees/$employeeId")
-            .body(Mono.just(employee), EmployeeDTO::class.java)
+            .body(Mono.just(employee), EmployeeDto::class.java)
             .exchange()
             .expectBody()
             .returnResult()
@@ -78,13 +78,13 @@ class WebClientBasedEmployeeCrudActor(private val webClient: WebTestClient) : Em
         assertThat(result.status).isEqualTo(HttpStatus.NO_CONTENT)
     }
 
-    override fun getsAllEmployees(): EmployeeListDTO {
+    override fun getsAllEmployees(): EmployeeListDto {
         val result = webClient.get()
             .uri("/api/employees/")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk
-            .expectBody<EmployeeListDTO>()
+            .expectBody<EmployeeListDto>()
             .returnResult()
 
         return result.responseBody!!

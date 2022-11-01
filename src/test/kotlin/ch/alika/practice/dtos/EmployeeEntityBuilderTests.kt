@@ -8,7 +8,7 @@ class EmployeeEntityBuilderTests {
 
     @Test
     fun empty_dto_creates_default_employee() {
-        val entity = EmployeeMapper.mapDtoToEntity(EmployeeDTO())
+        val entity = EmployeeMapper.mapDtoToEntity(EmployeeDto())
         assertThat(entity.name).isEqualTo("")
     }
 

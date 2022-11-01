@@ -1,9 +1,9 @@
 package ch.alika.practice.controllers
 
-import ch.alika.practice.dtos.EmployeeDTO
-import ch.alika.practice.dtos.EmployeeListDTO
+import ch.alika.practice.dtos.EmployeeDto
+import ch.alika.practice.dtos.EmployeeListDto
 import ch.alika.practice.dtos.EmployeeMapper
-import ch.alika.practice.dtos.ObjectIdDTO
+import ch.alika.practice.dtos.ObjectIdDto
 import ch.alika.practice.entities.Employee
 import ch.alika.practice.services.EmployeeService
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,29 +18,29 @@ import java.util.stream.Collectors
 class EmployeeController @Autowired constructor(private val service: EmployeeService) {
 
     @GetMapping("/")
-    fun getAllEmployees(): ResponseEntity<EmployeeListDTO> {
+    fun getAllEmployees(): ResponseEntity<EmployeeListDto> {
         val allEmployees = service.getAllEmployees()
             .stream()
-            .map { this.convertToDTO(it) }
+            .map { this.convertToDto(it) }
             .collect(Collectors.toList()) as ArrayList
-        return ResponseEntity.ok().body(EmployeeListDTO(allEmployees))
+        return ResponseEntity.ok().body(EmployeeListDto(allEmployees))
     }
 
     @GetMapping("/{id}")
-    fun getEmployee(@PathVariable id: Long): ResponseEntity<EmployeeDTO> {
-        val employeeDTO = EmployeeMapper.mapEntityToDTO(service.getEmployeeById(id))
+    fun getEmployee(@PathVariable id: Long): ResponseEntity<EmployeeDto> {
+        val employeeDTO = convertToDto(service.getEmployeeById(id))
         return ResponseEntity.ok().body(employeeDTO)
     }
 
     @PostMapping("")
-    fun newEmployee(@RequestBody employeeDTO: EmployeeDTO): ResponseEntity<Any> {
+    fun newEmployee(@RequestBody employeeDTO: EmployeeDto): ResponseEntity<Any> {
         val newEmployee = convertToEntity(employeeDTO)
-        val objectIdDTO = ObjectIdDTO(service.newEmployee(newEmployee))
+        val objectIdDTO = ObjectIdDto(service.newEmployee(newEmployee))
         return ResponseEntity.status(HttpStatus.CREATED).body(objectIdDTO)
     }
 
     @PutMapping("/{id}")
-    fun replaceEmployee(@PathVariable id: Long, @RequestBody employeeDTO: EmployeeDTO): ResponseEntity<Any> {
+    fun replaceEmployee(@PathVariable id: Long, @RequestBody employeeDTO: EmployeeDto): ResponseEntity<Any> {
         val newEmployee = convertToEntity(employeeDTO)
         service.replaceEmployee(id, newEmployee)
         return ResponseEntity.ok().build()
@@ -52,6 +52,6 @@ class EmployeeController @Autowired constructor(private val service: EmployeeSer
         return ResponseEntity.noContent().build()
     }
 
-    private fun convertToEntity(employeeDTO: EmployeeDTO) = EmployeeMapper.mapDtoToEntity(employeeDTO)
-    private fun convertToDTO(employee: Employee) = EmployeeMapper.mapEntityToDTO(employee)
+    private fun convertToEntity(employeeDto: EmployeeDto) = EmployeeMapper.mapDtoToEntity(employeeDto)
+    private fun convertToDto(employee: Employee) = EmployeeMapper.mapEntityToDto(employee)
 }

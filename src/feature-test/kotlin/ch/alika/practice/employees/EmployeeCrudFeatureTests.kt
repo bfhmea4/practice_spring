@@ -1,6 +1,6 @@
 package ch.alika.practice.employees
 
-import ch.alika.practice.dtos.EmployeeDTO
+import ch.alika.practice.dtos.EmployeeDto
 import ch.alika.practice.exceptions.EntityNotFoundException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -95,6 +95,6 @@ class EmployeeCrudFeatureTests {
 
     }
     
-    private fun createEmployeeDTO(name: String = "") = EmployeeDTO(name = name)
+    private fun createEmployeeDTO(name: String = "") = EmployeeDto(name = name)
 }
 

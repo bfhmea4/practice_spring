@@ -5,14 +5,14 @@ import ch.alika.practice.entities.Employee
 class EmployeeMapper private constructor() {
 
     companion object {
-        fun mapDtoToEntity(employeeDTO: EmployeeDTO): Employee {
+        fun mapDtoToEntity(employeeDto: EmployeeDto): Employee {
             return Employee(
-                name = employeeDTO.name ?: ""
+                name = employeeDto.name ?: ""
             )
         }
 
-        fun mapEntityToDTO(employeeEntity: Employee): EmployeeDTO {
-            return EmployeeDTO(
+        fun mapEntityToDto(employeeEntity: Employee): EmployeeDto {
+            return EmployeeDto(
                 name = employeeEntity.name,
                 id = employeeEntity.id
             )

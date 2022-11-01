@@ -1,7 +1,7 @@
 package ch.alika.practice.fizzbuzz.impl
 
 import ch.alika.practice.controllers.FizzBuzzController
-import ch.alika.practice.dtos.FizzBuzzResultDTO
+import ch.alika.practice.dtos.FizzBuzzResultDto
 import ch.alika.practice.fizzbuzz.FizzBuzzActor
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -19,12 +19,12 @@ class WebClientBasedFizzBuzzActor(private val client: WebTestClient) : FizzBuzzA
     }
 
     override fun getsFizzBuzzResult(n: Int): String {
-        val responseBody: FizzBuzzResultDTO? = client.get()
+        val responseBody: FizzBuzzResultDto? = client.get()
             .uri("/api/fizzbuzz/$n")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectHeader().valueEquals("Content-Type", "application/json")
-            .expectBody<FizzBuzzResultDTO>()
+            .expectBody<FizzBuzzResultDto>()
             .returnResult().responseBody
 
         return responseBody?.result ?: ""

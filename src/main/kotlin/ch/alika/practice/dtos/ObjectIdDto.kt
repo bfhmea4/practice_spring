@@ -1,5 +1,5 @@
 package ch.alika.practice.dtos
 
-data class ObjectIdDTO(
+data class ObjectIdDto(
     val id: Long
 )
