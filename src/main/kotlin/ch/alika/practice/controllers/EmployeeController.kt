@@ -14,9 +14,10 @@ import java.util.stream.Collectors
 
 
 @RestController
+@RequestMapping("/api/employees")
 class EmployeeController @Autowired constructor(private val service: EmployeeService) {
 
-    @GetMapping("/api/employees")
+    @GetMapping("/")
     fun getAllEmployees(): ResponseEntity<EmployeeListDTO> {
         val allEmployees = service.getAllEmployees()
             .stream()
@@ -25,27 +26,27 @@ class EmployeeController @Autowired constructor(private val service: EmployeeSer
         return ResponseEntity.ok().body(EmployeeListDTO(allEmployees))
     }
 
-    @GetMapping("/api/employees/{id}")
+    @GetMapping("/{id}")
     fun getEmployee(@PathVariable id: Long): ResponseEntity<EmployeeDTO> {
         val employeeDTO = EmployeeMapper.mapEntityToDTO(service.getEmployeeById(id))
         return ResponseEntity.ok().body(employeeDTO)
     }
 
-    @PostMapping("/api/employees")
+    @PostMapping("")
     fun newEmployee(@RequestBody employeeDTO: EmployeeDTO): ResponseEntity<Any> {
         val newEmployee = convertToEntity(employeeDTO)
         val objectIdDTO = ObjectIdDTO(service.newEmployee(newEmployee))
         return ResponseEntity.status(HttpStatus.CREATED).body(objectIdDTO)
     }
 
-    @PutMapping("/api/employees/{id}")
+    @PutMapping("/{id}")
     fun replaceEmployee(@PathVariable id: Long, @RequestBody employeeDTO: EmployeeDTO): ResponseEntity<Any> {
         val newEmployee = convertToEntity(employeeDTO)
         service.replaceEmployee(id, newEmployee)
         return ResponseEntity.ok().build()
     }
 
-    @DeleteMapping("/api/employees/{id}")
+    @DeleteMapping("/{id}")
     fun deleteEmployee(@PathVariable id: Long): ResponseEntity<Any> {
         service.deleteEmployeeById(id)
         return ResponseEntity.noContent().build()
